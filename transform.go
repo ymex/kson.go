@@ -1,4 +1,4 @@
-package sonar
+package kson
 
 import (
 	"errors"

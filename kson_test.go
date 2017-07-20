@@ -1,4 +1,4 @@
-package sonar
+package kson
 
 import (
 	"testing"
@@ -38,14 +38,14 @@ func TestN(t *testing.T) {
 		 	}
 		 }
 		}`)
-	sonar := NewSonar(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
+	kson := NewSonar(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
 
-	fmt.Println(sonar.GotFirst().ToInt()) //>>200
-	fmt.Println(sonar.GotPosition(1).ToFloat())//>>253.56
-	fmt.Println(sonar.Got("last").ToFloat())//>>253.56
-	fmt.Println(sonar.Got("message").ToString())//>>
-	fmt.Println(sonar.GotLast().Interface())//map[name:Celina age:17]
-	fmt.Println(sonar.Got("result").Interface())//map[name:Celina age:17]
+	fmt.Println(kson.GotFirst().ToInt())        //>>200
+	fmt.Println(kson.GotPosition(1).ToFloat())  //>>253.56
+	fmt.Println(kson.Got("last").ToFloat())     //>>253.56
+	fmt.Println(kson.Got("message").ToString()) //>>
+	fmt.Println(kson.GotLast().Interface())     //map[name:Celina age:17]
+	fmt.Println(kson.Got("result").Interface()) //map[name:Celina age:17]
 
 
 	arrjson := []byte(`[{

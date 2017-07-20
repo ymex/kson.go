@@ -1,11 +1,11 @@
-# sonar
+# kson
 a Go package to search for JSON value and  interact with arbitrary JSON 。 用于搜索JSON值并与任意JSON交互的go 语言json 库。
 
 
 ##go get
 
 ```
-go get -u github.com/ymex/sonar
+go get -u github.com/ymex/go-kson
 ```
 
 ## 语法
@@ -63,16 +63,16 @@ b :=[]byte(`{
 ```
 2,首先我们得到结果集
 ```
-sonar := NewSonar(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
+kson := NewKson(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
 ```
 
 3,从结果集中取出所需要的值
 
 ```
-sonar.GotFirst().ToInt()        //>>200
-sonar.GotPosition(1).ToFloat()  //>>253.56
-sonar.Got("last").ToFloat()     //>>253.56
-sonar.Got("message").ToString() //>>success
-sonar.GotLast().Interface()     //map[name:Celina age:17]
-sonar.Got("result").Interface() //map[name:Celina age:17]
+kson.GotFirst().ToInt()        //>>200
+kson.GotPosition(1).ToFloat()  //>>253.56
+kson.Got("last").ToFloat()     //>>253.56
+kson.Got("message").ToString() //>>success
+kson.GotLast().Interface()     //map[name:Celina age:17]
+kson.Got("result").Interface() //map[name:Celina age:17]
 ```

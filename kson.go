@@ -1,4 +1,4 @@
-package sonar
+package kson
 
 import (
 	"encoding/json"
@@ -10,21 +10,21 @@ import (
 	"log"
 )
 
-type Sonar struct {
+type Kson struct {
 	data  interface{}
 	store map[string]interface{}
 	keys  []string
 	err   error
 }
 
-func NewSonar(data interface{}) *Sonar {
-	kson := new(Sonar)
+func NewKson(data interface{}) *Kson {
+	kson := new(Kson)
 	if val, ok := data.(string); ok {
 		kson.err = kson.UnmarshalJSON([]byte(val))
 	} else if val, ok := data.([]byte); ok {
 		kson.err = kson.UnmarshalJSON(val)
 	} else {
-		kson.err = errors.New("Sonar: cannot unmarshal data into Go value of type " + reflect.TypeOf(data).String())
+		kson.err = errors.New("Kson: cannot unmarshal data into Go value of type " + reflect.TypeOf(data).String())
 	}
 	//if sonar.HasError() {
 	//	log.Panicln(sonar.err)
@@ -32,27 +32,27 @@ func NewSonar(data interface{}) *Sonar {
 	return kson
 }
 
-func (k *Sonar) UnmarshalJSON(p []byte) error {
+func (k *Kson) UnmarshalJSON(p []byte) error {
 	return json.Unmarshal(p, &k.data)
 }
 
-func (k *Sonar) Interface() interface{} {
+func (k *Kson) Interface() interface{} {
 	return k.data
 }
 
-func (k *Sonar) Encode() ([]byte, error) {
+func (k *Kson) Encode() ([]byte, error) {
 	return k.MarshalJSON()
 }
 
-func (k *Sonar) EncodePretty() ([]byte, error) {
+func (k *Kson) EncodePretty() ([]byte, error) {
 	return json.MarshalIndent(&k.data, "", "  ")
 }
 
-func (k *Sonar) MarshalJSON() ([]byte, error) {
+func (k *Kson) MarshalJSON() ([]byte, error) {
 	return json.Marshal(&k.data)
 }
 
-func (k *Sonar) Find(keys ... string) *Sonar {
+func (k *Kson) Find(keys ... string) *Kson {
 	if len(keys) <= 0 {
 		log.Panicln("Find() received have no arguments")
 	}
@@ -74,17 +74,17 @@ func (k *Sonar) Find(keys ... string) *Sonar {
 	return k
 }
 
-func (k *Sonar) HasError() bool {
+func (k *Kson) HasError() bool {
 	return k.err != nil
 }
 
-func (k *Sonar) clear() {
+func (k *Kson) clear() {
 	k.store = make(map[string]interface{}, 0)
 	k.keys = make([]string, 0)
 }
 
 //key->karr[1][2]
-func (k *Sonar) parseLink(data interface{}, key string) error {
+func (k *Kson) parseLink(data interface{}, key string) error {
 
 	aliasKey := k.aliasKey(key)
 	realKey := k.realKey(key)
@@ -112,7 +112,7 @@ func (k *Sonar) parseLink(data interface{}, key string) error {
 }
 
 //key[2][3]
-func (k *Sonar) parse(data interface{}, key string) (interface{}, error) {
+func (k *Kson) parse(data interface{}, key string) (interface{}, error) {
 
 	indexs, err := getMutArrayIndexs(key)
 	if err != nil {
@@ -157,7 +157,7 @@ func (k *Sonar) parse(data interface{}, key string) (interface{}, error) {
 	return nil, errors.New("type assertion to map[string]interface{} failed")
 }
 
-func (k *Sonar) aliasKey(key string) string {
+func (k *Kson) aliasKey(key string) string {
 	index := strings.Index(key, ":")
 	if index <= 0 || index == len(key)-1 {
 		return key
@@ -165,7 +165,7 @@ func (k *Sonar) aliasKey(key string) string {
 	return key[0:index]
 }
 
-func (k *Sonar) realKey(key string) string {
+func (k *Kson) realKey(key string) string {
 	index := strings.Index(key, ":")
 	if index <= 0 || index == len(key)-1 {
 		return key
@@ -195,7 +195,7 @@ func getMutArrayIndexs(arrayName string) ([]int, error) {
 	return indexs, nil
 }
 
-func (k *Sonar) Got(key string) *TypeTransform {
+func (k *Kson) Got(key string) *TypeTransform {
 	val, ok := k.store[key]
 	if ok {
 		return &TypeTransform{data: val}
@@ -203,17 +203,17 @@ func (k *Sonar) Got(key string) *TypeTransform {
 	return &TypeTransform{data: nil}
 }
 
-func (k *Sonar) GotFirst() *TypeTransform {
+func (k *Kson) GotFirst() *TypeTransform {
 	key := k.keys[0]
 	return k.Got(key)
 }
 
-func (k *Sonar) GotLast() *TypeTransform {
+func (k *Kson) GotLast() *TypeTransform {
 	key := k.keys[len(k.keys)-1]
 	return k.Got(k.aliasKey(key))
 }
 
-func (k *Sonar) GotPosition(index int) *TypeTransform {
+func (k *Kson) GotPosition(index int) *TypeTransform {
 	if index > len(k.keys)-1 || index <= 0 {
 		log.Panicln(strconv.Itoa(index) + " index out of range")
 	}
@@ -221,7 +221,7 @@ func (k *Sonar) GotPosition(index int) *TypeTransform {
 	return k.Got(k.aliasKey(key))
 }
 
-func (k *Sonar) checkKeys() {
+func (k *Kson) checkKeys() {
 	if len(k.keys) <= 0 {
 		log.Panicln("sonar have no key in it.")
 	}
@@ -230,38 +230,38 @@ func (k *Sonar) checkKeys() {
 // Get returns a pointer to a new `Json` object
 // for `key` in its `map` representation
 
-func (k *Sonar) Get(key string) *Sonar {
+func (k *Kson) Get(key string) *Kson {
 	m, err := k._map()
 	if err == nil {
 		if val, ok := m[key]; ok {
-			return &Sonar{data: val, err: nil}
+			return &Kson{data: val, err: nil}
 		}
 	}
-	return &Sonar{data: nil, err: err}
+	return &Kson{data: nil, err: err}
 }
 
-func (k *Sonar) GetIndex(index int) *Sonar {
+func (k *Kson) GetIndex(index int) *Kson {
 	a, err := k._array()
 	if err == nil {
 		if len(a) > index {
-			return &Sonar{data: a[index], err: nil}
+			return &Kson{data: a[index], err: nil}
 		}
 	}
-	return &Sonar{data: nil, err: err}
+	return &Kson{data: nil, err: err}
 }
 
-func (k *Sonar) Type() *TypeTransform {
+func (k *Kson) Type() *TypeTransform {
 	return &TypeTransform{data: k.data}
 }
 
-func (k *Sonar) _map() (map[string]interface{}, error) {
+func (k *Kson) _map() (map[string]interface{}, error) {
 	if m, ok := (k.data).(map[string]interface{}); ok {
 		return m, nil
 	}
 	return nil, errors.New("type assertion to map[string]interface{} failed")
 }
 
-func (k *Sonar) _array() ([]interface{}, error) {
+func (k *Kson) _array() ([]interface{}, error) {
 	if a, ok := (k.data).([]interface{}); ok {
 		return a, nil
 	}
