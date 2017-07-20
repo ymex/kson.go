@@ -38,7 +38,7 @@ func TestN(t *testing.T) {
 		 	}
 		 }
 		}`)
-	kson := NewSonar(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
+	kson := Unmarshal(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
 
 	fmt.Println(kson.GotFirst().ToInt())        //>>200
 	fmt.Println(kson.GotPosition(1).ToFloat())  //>>253.56
@@ -58,7 +58,7 @@ func TestN(t *testing.T) {
 		  "color":"yellow"
 		 }]`)
 
-	k := NewSonar(arrjson).Find("[1]->width","[0]->color")
+	k := Unmarshal(arrjson).Find("[1]->width","[0]->color")
 	fmt.Println(k.GotFirst().ToFloat())//>>93.2
 	fmt.Println(k.GotLast().ToString())//>>red
 }

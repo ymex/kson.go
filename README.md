@@ -27,6 +27,7 @@ go get -u github.com/ymex/go-kson
 多级查找用`->`表示。 如，"result->books[2]->title" 表示查找 result 对象下数组books 的第二个元素对象的title.
 
 - 条件查找[暂未支持]
+
 条件查找仅支持 `==`,`!=`,`>`,`<`,`>=`,`<=` ,查找内容放在`{}`中间。如`students->{age>24}`
 
 
@@ -65,7 +66,7 @@ b :=[]byte(`{
 ```
 2,首先我们得到结果集
 ```
-kson := NewKson(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
+kson := Unmarshal(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
 ```
 
 3,从结果集中取出所需要的值

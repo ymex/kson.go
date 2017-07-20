@@ -17,7 +17,7 @@ type Kson struct {
 	err   error
 }
 
-func NewKson(data interface{}) *Kson {
+func Unmarshal(data interface{}) *Kson {
 	kson := new(Kson)
 	if val, ok := data.(string); ok {
 		kson.err = kson.UnmarshalJSON([]byte(val))
