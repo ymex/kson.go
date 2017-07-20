@@ -1,6 +1,13 @@
 # sonar
 a Go package to search for JSON value and  interact with arbitrary JSON 。 用于搜索JSON值并与任意JSON交互的go 语言json 库。
 
+
+##go get
+
+```
+go get -u github.com/ymex/sonar
+```
+
 ## 语法
 
 采用链式函数结构保持代码简洁，
