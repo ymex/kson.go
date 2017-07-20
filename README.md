@@ -1,8 +1,10 @@
 # kson
-a Go package to search for JSON value and  interact with arbitrary JSON 。 用于搜索JSON值并与任意JSON交互的go 语言json 库。
+a Go package to search for JSON value and  interact with arbitrary JSON 。
+
+用于搜索JSON值并与任意JSON交互的go 语言json 库。
 
 
-##go get
+## go get
 
 ```
 go get -u github.com/ymex/go-kson
@@ -12,19 +14,19 @@ go get -u github.com/ymex/go-kson
 
 采用链式函数结构保持代码简洁，
 
-### 别名 
+- 别名
 
 查找的key可以使用:来定义别名。如，`result:data` ，那么在结果 集中，result 就是data 的别名。
 
-### 数组 
+- 数组
 
 查找数组时使用`[] `
 
-### 多级查找 
+- 多级查找
 
 多级查找用`->`表示。 如，"result->books[2]->title" 表示查找 result 对象下数组books 的第二个元素对象的title.
 
-### 条件查找[暂未支持]
+- 条件查找[暂未支持]
 条件查找仅支持 `==`,`!=`,`>`,`<`,`>=`,`<=` ,查找内容放在`{}`中间。如`students->{age>24}`
 
 
@@ -69,10 +71,10 @@ kson := NewKson(b).Find("code","last:data->mileage","message","result:data->pass
 3,从结果集中取出所需要的值
 
 ```
-kson.GotFirst().ToInt()        //>>200
-kson.GotPosition(1).ToFloat()  //>>253.56
-kson.Got("last").ToFloat()     //>>253.56
-kson.Got("message").ToString() //>>success
-kson.GotLast().Interface()     //map[name:Celina age:17]
-kson.Got("result").Interface() //map[name:Celina age:17]
+kson.GotFirst().ToInt()        //>> 200
+kson.GotPosition(1).ToFloat()  //>> 253.56
+kson.Got("last").ToFloat()     //>> 253.56
+kson.Got("message").ToString() //>> success
+kson.GotLast().Interface()     //>> map[name:Celina age:17]
+kson.Got("result").Interface() //>> map[name:Celina age:17]
 ```
