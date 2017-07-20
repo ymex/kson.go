@@ -34,5 +34,4 @@ _testmain.go
 .idea
 .idea/
 
-ymex/static/vendor
 *.rdb
