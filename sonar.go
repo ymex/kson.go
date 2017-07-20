@@ -209,9 +209,8 @@ func (k *Sonar) GotFirst() *TypeTransform {
 }
 
 func (k *Sonar) GotLast() *TypeTransform {
-
 	key := k.keys[len(k.keys)-1]
-	return k.Got(key)
+	return k.Got(k.aliasKey(key))
 }
 
 func (k *Sonar) GotPosition(index int) *TypeTransform {

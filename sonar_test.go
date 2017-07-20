@@ -11,31 +11,42 @@ type Person struct {
 }
 
 func TestN(t *testing.T) {
-	bson :=[]byte(`{
-		"name":"ymex",
-		"person":{
-			"sex":"man",
-			"marry":"hellow"
-		},
-		"age":4.2,
-		"car":"T",
-		"boxes":[
-			 [
-			  {"hi":"hello","say":"bye"},
-			  {"hi":"hello","say":"bye"}
-			 ],[
-			  {"hi":"hello","say":"bye"},
-			  {"hi":"hello","say":"bye"}
-			 ],[
-			  {"hi":"hello","say":"bye"},
-			  {"hi":"hello","say":"bye"}
-			 ]
-		]
-	}`)
-	kson := NewSonar(bson).Find("age","last:person->sex","boxes:boxes[0][1]")
-	fmt.Println(kson.GotFirst().ToFloat())
-	fmt.Println(kson.GotPosition(1).ToString())
-	fmt.Println(kson.GotLast().Map())
+	b :=[]byte(`{
+		 "code":200,
+		 "message":"success",
+		 "data":{
+		 	"busId":24,
+		 	"mileage":253.56,
+		 	"passenger":{
+		 		"students":[
+					[{"name":"Bili","age":16},{"name":"Celina","age":17},{"name":"Serafina","age":18}],
+					[{"name":"Abby","age":19},{"name":"Amaris","age":20},{"name":"Fiona","age":21}],
+					[{"name":"Snow","age":24},{"name":"Muse","age":23},{"name":"Gina","age":22}]
+		 		],
+		 		"teachers":[
+		 		 {
+		 		 	"name":"Tom",
+		 		 	"age":37,
+		 		 	"teach":"math"
+		 		 },
+		 		  {
+		 		 	"name":"Li",
+		 		 	"age":37,
+		 		 	"teach":"math"
+		 		 }
+		 		]
+		 	}
+		 }
+		}`)
+	sonar := NewSonar(b).Find("code","last:data->mileage","message","result:data->passenger->students[0][1]")
+
+	fmt.Println(sonar.GotFirst().ToInt()) //>>200
+	fmt.Println(sonar.GotPosition(1).ToFloat())//>>253.56
+	fmt.Println(sonar.Got("last").ToFloat())//>>253.56
+	fmt.Println(sonar.Got("message").ToString())//>>
+	fmt.Println(sonar.GotLast().Interface())//map[name:Celina age:17]
+	fmt.Println(sonar.Got("result").Interface())//map[name:Celina age:17]
+
 
 	arrjson := []byte(`[{
 		  "width":24.0,
@@ -48,8 +59,8 @@ func TestN(t *testing.T) {
 		 }]`)
 
 	k := NewSonar(arrjson).Find("[1]->width","[0]->color")
-	fmt.Println(k.GotFirst().ToFloat())
-	fmt.Println(k.GotLast().ToString())
+	fmt.Println(k.GotFirst().ToFloat())//>>93.2
+	fmt.Println(k.GotLast().ToString())//>>red
 }
 
 

@@ -17,6 +17,10 @@ func NewTypeTransform(data interface{}) *TypeTransform {
 	return &TypeTransform{data: data}
 }
 
+func (t *TypeTransform)Interface() interface{}  {
+	return t.data
+}
+
 //Bool guarantees the return of a `bool` (with optional default) and error
 func (t *TypeTransform) Bool(values ... bool) (bool, error) {
 	var def bool = false
@@ -316,6 +320,21 @@ func (t *TypeTransform)ToFloat(values ... float64) float64 {
 		if fval,ferr := strconv.ParseFloat(val,64);ferr == nil {
 			return fval
 		}
+	}
+	return def
+}
+
+func (t *TypeTransform)ToMap(values ... map[string]interface{})  map[string]interface{} {
+	var def map[string]interface{}
+
+	if len(values) > 1 {
+		log.Panicf("String() received too many arguments %d", len(values))
+	}else if len(values) == 1 {
+		def = values[0]
+
+	}
+	if val,err := t.Map();err == nil {
+		return val
 	}
 	return def
 }
